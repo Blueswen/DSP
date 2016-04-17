@@ -1,4 +1,5 @@
 library('ROCR') ## for AUC_func
+Rstudio <- FALSE
 
 argParser_func <- function(argName, argRng){
   argindex <- 0
@@ -46,6 +47,18 @@ argParser_func <- function(argName, argRng){
   }
   
   return(argList)
+}
+
+checkPar_func <- function(parName, parList, inputList){
+  for( i in c(1:length(inputList))){
+    if( inputList[[i]] %in% parList){
+      next;
+    }
+    else{
+      errorStr <- paste("Wrong ", parName, " parameter. Parameters can use in ", parName, " are ", paste(parList,collapse = ", ") ,".",sep="")
+      stop( errorStr, call.=FALSE)
+    }
+  }
 }
 
 resultSummary_func <- function(target, data){
@@ -156,16 +169,19 @@ firstUp <- function(str){
   return(paste(toupper(substring(str,1,1)),tolower(substring(str,2)),sep=""))
 }
 
-##args <-c("-target","male",
-##        "-query","F1","AUC","sensitivity","specificity",
-##         "-files",
-##         "~/Documents/NCCU/1042/DSP/HW/Homework2/Data/set1",
-##         "~/Documents/NCCU/1042/DSP/HW/Homework2/Data/set2",
-##         "~/Documents/NCCU/1042/DSP/HW/Homework2/Data/set3",
-##         "~/Documents/NCCU/1042/DSP/HW/Homework2/Data/set4",
-##         "~/Documents/NCCU/1042/DSP/HW/Homework2/Data/set5",
-##         "-out","~/Documents/NCCU/1042/DSP/HW/Homework2/Results")
-args = commandArgs(trailingOnly=TRUE)
+if(Rstudio){
+  args <-c("-target","male",
+          "-query","F1","AUC","sensitivitys","specificity",
+           "-files",
+           "~/Documents/NCCU/1042/DSP/HW/Homework2/Data/set1",
+           "~/Documents/NCCU/1042/DSP/HW/Homework2/Data/set2",
+           "~/Documents/NCCU/1042/DSP/HW/Homework2/Data/set3",
+           "~/Documents/NCCU/1042/DSP/HW/Homework2/Data/set4",
+           "~/Documents/NCCU/1042/DSP/HW/Homework2/Data/set5",
+           "-out","~/Documents/NCCU/1042/DSP/HW/Homework2/Results")
+} else{
+  args = commandArgs(trailingOnly=TRUE) 
+}
 if (length(args)==0) {
   stop("USAGE: Rscript hw2.R -target  male/female -query F1 AUC sensitivity specificity -files set1 set2 … setx –out out_folder", call.=FALSE)
 } else {
@@ -174,6 +190,13 @@ if (length(args)==0) {
   argName <- c("-target","-query","-files","-out")
   argRng <- list( c(1,1) , c(1,4) , c(1,255), c(1,1)) ## Unlimited can use Inf
   argList <- argParser_func(argName,argRng)
+  
+  ## Check query and target
+  parList <- c()
+  parList$target <- c("Male","Female")
+  parList$query <- c("F1","AUC","sensitivity","specificity")
+  checkPar_func("target",parList$target ,firstUp(argList[["-target"]][[1]]))
+  checkPar_func("query",parList$query ,argList[["-query"]])
   
   target <- firstUp(argList[["-target"]][[1]])
   query <- argList[["-query"]]
