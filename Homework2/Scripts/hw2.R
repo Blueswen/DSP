@@ -1,5 +1,5 @@
 library('ROCR') ## for AUC_func
-Rstudio <- FALSE
+Rstudio <- TRUE
 
 argParser_func <- function(argName, argRng){
   argindex <- 0
@@ -100,7 +100,7 @@ specificity_func <- function(summary){
   return(summary$tn / (summary$tn + summary$tp))
 }
 
-AUC_func <- function(target,data,index){
+AUC_func <- function(target,data,index,p){
   testor <- list(predictions<-c(),labels<-c())
   
   ## Build lables
@@ -119,20 +119,21 @@ AUC_func <- function(target,data,index){
   pred <- prediction(testor$predictions,testor$labels)
   
   ## Plot ROC Curve Picture
-  if (index==1){
-    plot(performance(pred,"tpr","fpr"), col=rainbow(10)[[index]])
-    title(main="ROC Curve of 10 Methods")
+  if(p){
+    if (index==1){
+      plot(performance(pred,"tpr","fpr"), col=rainbow(10)[[index]])
+      title(main="ROC Curve of 10 Methods")
+    }
+    else{
+      plot(performance(pred,"tpr","fpr"), add = TRUE, col=rainbow(10)[[index]])
+    }
+    if(index<=5){
+      legend(0,1-0.04*(index-1),legend=c(paste("M",index)),col=rainbow(10)[[index]],lty=1,cex=0.4,box.lty=0)
+    }
+    else{
+      legend(0.08,1-0.04*(index-6),legend=c(paste("M",index)),col=rainbow(10)[[index]],lty=1,cex=0.4,box.lty=0)
+    } 
   }
-  else{
-    plot(performance(pred,"tpr","fpr"), add = TRUE, col=rainbow(10)[[index]])
-  }
-  if(index<=5){
-    legend(0,1-0.04*(index-1),legend=c(paste("M",index)),col=rainbow(10)[[index]],lty=1,cex=0.4,box.lty=0)
-  }
-  else{
-    legend(0.08,1-0.04*(index-6),legend=c(paste("M",index)),col=rainbow(10)[[index]],lty=1,cex=0.4,box.lty=0)
-  }
-  
   
   return(attributes(performance(pred,'auc'))$y.values[[1]])
 }
@@ -148,16 +149,13 @@ query_func <-function(func,target,data,index){
     return(specificity_func(resultSummary_func(target,data)))
   }
   else if(func=="AUC"){
-    return(AUC_func(target,data,index))
+    return(AUC_func(target,data,index,TRUE))
     ##return(0)
   }
 }
 
-signigicanceTest_func <- function(target,data){
-  summary <- resultSummary_func(target,data)
-  testor <- rbind(c(summary$tp,summary$fn),c(summary$fp,summary$tn))
-  res <- fisher.test(testor)
-  if( res$p.value < 0.05 ){
+significantTest_func <- function(target,data){
+  if( AUC_func(target,data,1,FALSE) < 0.5 ){
     return("no")
   }
   else{
@@ -171,7 +169,7 @@ firstUp <- function(str){
 
 if(Rstudio){
   args <-c("-target","male",
-          "-query","F1","AUC","sensitivitys","specificity",
+          "-query","F1","AUC","sensitivity","specificity",
            "-files",
            "~/Documents/NCCU/1042/DSP/HW/Homework2/Data/set1",
            "~/Documents/NCCU/1042/DSP/HW/Homework2/Data/set2",
@@ -235,7 +233,9 @@ if (length(args)==0) {
         res <- query_func(query[[k]],target,input[[i]][[j]],j)
         current[[query[[k]]]] <- round(res, digits = 2)
       }
-      current$significant <- signigicanceTest_func(target,input[[i]][[j]])
+      
+      ## If AUC of ROC curve smaller than 0.5 is not significant
+      current$significant <- significantTest_func(target,input[[i]][[j]])
       output$csv[[i]] <- rbind(output$csv[[i]],current)
     }
     

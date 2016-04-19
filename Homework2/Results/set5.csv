@@ -1,12 +1,12 @@
 method,F1,AUC,sensitivity,specificity,significant
 method 1,0.57,0.62,0.57,0.43,yes
 method 2,0.62,0.64,0.67,0.5,yes
-method 3,0.46,0.45,0.5,0.5,yes
-method 4,0.38,0.31,0.33,0,yes
+method 3,0.46,0.45,0.5,0.5,no
+method 4,0.38,0.31,0.33,0,no
 method 5,0.63,0.5,0.56,0.29,yes
 method 6,0.55,0.6,0.75,0.62,yes
 method 7,0.67,0.76,0.8,0.56,yes
 method 8,0.67,0.74,0.8,0.56,yes
-method 9,0.63,0.36,0.56,0.29,yes
-method 10,0.29,0.21,0.29,0.33,yes
+method 9,0.63,0.36,0.56,0.29,no
+method 10,0.29,0.21,0.29,0.33,no
 highest,method7,method7,method7,method6,nan
