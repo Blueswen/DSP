@@ -1,0 +1,15 @@
+.nv-axislabel {
+  font: normal 16px Arial !important;
+}
+
+#plot {
+  width: 100%;
+}
+
+.xy-tooltip {
+  padding: 5px !important;
+}
+
+.xy-tooltip div {
+  padding: 2px;
+}
