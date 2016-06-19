@@ -1,5 +1,5 @@
 library(e1071)
-Rstudio <- FALSE
+Rstudio <- TRUE
 
 argParser_func <- function(argName, argRng){
   argindex <- 0
@@ -74,7 +74,7 @@ tableAccuracy_func <- function(table){
       }
     }
   }
-  return(round(TP/(TP+error),digits = 2))
+  return(round(TP/(TP+error),digits = 4))
 }
 
 tablePrecision_func <- function(table){
