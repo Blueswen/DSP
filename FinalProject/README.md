@@ -7,10 +7,10 @@
 4. Based on: [KAMERA-Emergency-Medicine-Challenge](http://dc.dsp.im/main/content/KAMERA-Emergency-Medicine-Challenge) hold by [DSP](http://dsp.im/)
 
 ### Goal
-1. total of all triage level (total)
-2. emergency department congestion light (light)
-3. number of appointment of EM (A12)
-4. number of waiting bed of EM (A15)
+1. Predict total of all triage level (total)
+2. Predict emergency department congestion light (light)
+3. Predict number of appointment of EM (A12)
+4. Predict number of waiting bed of EM (A15)
 
 ### Data
 1. Part of KAMERA’s partners’ emergency
