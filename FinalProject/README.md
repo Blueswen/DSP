@@ -20,6 +20,10 @@
 5. Records: 21364 records
 6. Fields: 37 fields
 
+### Measurement
+1. [Morisita-Horn Similarity](https://dspim.gitbooks.io/data-challenge-guide/content/morisita-horn_similarity.html):Morisita-Horn Similarity could consider normalize Euclidean distance to [0,1]
+2. Adjusted R Squared 
+
 ### Using libraries
 1. [e1070](https://cran.r-project.org/web/packages/e1071/index.html): [libSVM](https://www.csie.ntu.edu.tw/~cjlin/libsvm/) is a library for Support Vector Machine developed by Chih-Chung Chang and Chih-Jen Lin of NTU
 2. [dummies](https://cran.r-project.org/web/packages/dummies/dummies.pdf): dummies is a library to create dummy/indicator variables flexibly and efficiently.
